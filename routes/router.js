@@ -2,20 +2,12 @@ const express = require("express");
 const router = express.Router();
 const users = require("../models/userSchema");
 
-
-
-// router.get("/",(req,res)=>{
-//     console.log("connect");
-// });
-
-// register user
-
 router.post("/register",async(req,res)=>{
-    // console.log(req.body);
+   
     const {name,email,age,mobile,work,add,desc} = req.body;
 
     if(!name || !email || !age || !mobile || !work || !add || !desc){
-        res.status(422).json("plz fill the data");
+        res.status(422).send({"msg":"plz fill the data"});
     }
 
     try {
@@ -24,19 +16,19 @@ router.post("/register",async(req,res)=>{
         console.log(preuser);
 
         if(preuser){
-            res.status(422).json("this is user is already present");
+            res.status(422).send({"msg": "this is user is already present"});
         }else{
             const adduser = new users({
                 name,email,age,mobile,work,add,desc
             });
 
             await adduser.save();
-            res.status(201).json(adduser);
+            res.status(201).send(adduser);
             console.log(adduser);
         }
 
     } catch (error) {
-        res.status(422).json(error);
+        res.status(422).send({"msg":"error"});
     }
 })
 
@@ -46,10 +38,10 @@ router.post("/register",async(req,res)=>{
 router.get("/getdata",async(req,res)=>{
     try {
         const userdata = await users.find();
-        res.status(201).json(userdata)
+        res.status(201).send(userdata)
         console.log(userdata);
     } catch (error) {
-        res.status(422).json(error);
+        res.status(422).send(error);
     }
 })
 
@@ -62,10 +54,10 @@ router.get("/getuser/:id",async(req,res)=>{
 
         const userindividual = await users.findById({_id:id});
         console.log(userindividual);
-        res.status(201).json(userindividual)
+        res.status(201).send(userindividual)
 
     } catch (error) {
-        res.status(422).json(error);
+        res.status(422).send(error);
     }
 })
 
@@ -81,10 +73,10 @@ router.patch("/updateuser/:id",async(req,res)=>{
         });
 
         console.log(updateduser);
-        res.status(201).json(updateduser);
+        res.status(201).send(updateduser);
 
     } catch (error) {
-        res.status(422).json(error);
+        res.status(422).send(error);
     }
 })
 
@@ -96,10 +88,10 @@ router.delete("/deleteuser/:id",async(req,res)=>{
 
         const deletuser = await users.findByIdAndDelete({_id:id})
         console.log(deletuser);
-        res.status(201).json(deletuser);
+        res.status(201).send(deletuser);
 
     } catch (error) {
-        res.status(422).json(error);
+        res.status(422).send(error);
     }
 })
 
