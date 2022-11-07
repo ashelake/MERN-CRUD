@@ -27,5 +27,4 @@ app.listen(port, async () => {
     console.log("Error in Connectiong DB");
     console.log(err);
   }
-  console.log(`server is start port number ${port}`);
 });
